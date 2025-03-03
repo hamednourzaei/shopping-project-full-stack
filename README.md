@@ -29,7 +29,7 @@ This Project  was a collaborative project buit by team of 5 members in 5 days
 ## Navbar:
 
 - This is the landing page of our website. Clicking an option on the Navbar will redirect to the respective page.
-<img width="50%" src="./shopping-project-full-stack/src/utility/navbar2.png">
+<img width="50%" src="./src/utility/sign up.png">
 - 
 <img width="50%" src="./shopping-project-full-stack/src/utility/Navbar.png">
 
