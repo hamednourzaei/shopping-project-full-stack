@@ -73,7 +73,7 @@ export const Jeweleryreducer = (state = initialState, { type, payload }) => {
      case types.UPDATE_Jewelery_SUCCESS:{
 
       let Updated=state.Jewelery.map((Jewelery)=>{
-          if(Jewelery.id==payload.id){
+          if(Jewelery.id===payload.id){
            return {...Jewelery,payload}
           }
           return Jewelery
@@ -124,14 +124,14 @@ export const Jeweleryreducer = (state = initialState, { type, payload }) => {
       }
      }
      case types.SORT_JEWELERY: {
-      if (payload == "high") {
+      if (payload === "high") {
     
         let sorted = state.Jewelery.sort(
           (a, b) => Number(a.price) - Number(b.price)
         );
     
         return { ...state, Jewelery: [...sorted] };
-      } else if (payload == "low") {
+      } else if (payload === "low") {
         let sorted = state.Jewelery.sort(
           (a, b) => Number(b.price) - Number(a.price)
         );
