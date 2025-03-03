@@ -1,98 +1,160 @@
-import React from "react";
-import { Flex, Grid, Box, Text, Button, Icon, Image } from "@chakra-ui/react";
-import { AiFillStar } from 'react-icons/ai';
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setItem } from '../utility/localStorage';
-import { useDispatch, useSelector } from "react-redux";
-import { Get_Cosmetics_item, sortCOSMETICS } from "../store/Cosmetics/Cosmetics.action";
-import Loading from "./Loading";
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Avatar, Box, Button, Card, CardBody, CardFooter, CardHeader, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay, Flex, FormControl, FormLabel, Heading, IconButton, Image, Input, InputGroup, InputLeftAddon, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Stack, Table, TableCaption, TableContainer, Tbody, Td, Text, Textarea, Tfoot, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+ 
+import { ADD_Cosmetics_item, Get_Cosmetics_item, REMOVE_Cosmetics_item, UPDATE_Cosmetics_item } from '../../store/Cosmetics/Cosmetics.action';
+import { store } from '../../store/store';
+import Pdoduct from './Cosmetics';
+ 
 
-const Cosmetics = () => {
-  const [filter, setFilter] = useState("Mens");
-  const [reset, setReset] = useState(false);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { Cosmetics } = useSelector((store) => store.CosmeticsManger);
 
-  const handleClick = (item) => {
-    setItem("singleproduct", item);
-    navigate("/Cosmetics/singleproduct");
+
+
+ 
+
+const Clothes = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const [user,setUser]=useState([]) 
+    const [price,setPrice]=useState(0)
+
+
+    
+    const {Cosmetics}=useSelector((store)=>store.CosmeticsManger)
+    const dispatch=useDispatch()
+
+
+
+
+   const [filter,setFilter]=useState("Mens")
+   const [Creds,setCreds]=useState({})
+  
+
+    useEffect(()=>{
+       
+        dispatch(Get_Cosmetics_item())
+       },[Cosmetics]) 
+
+
+      //  let men = cloth.filter((item)=>item.category==filter)
+
+
+      //  useEffect(()=>{
+      //    men= cloth.filter((item)=>item.category==filter)
+      //    console.log(men)
+      //    },[filter]) 
+
+       const HandleFilterChang=(data)=>{
+        setFilter(data) 
+
+     }
+     
+   const hanldeChange = (e) => {
+    const { name, value } = e.target;
+    setCreds({
+      ...Creds,
+      [name]: value,
+    });
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(Creds)
+    dispatch(ADD_Cosmetics_item(Creds));
   };
 
-  const handleChange = (e) => {
-    const { value } = e.target;
-    if (value === "reset") {
-      setReset((previous) => !previous);
-      return;
-    }
-    dispatch(sortCOSMETICS(value));
-  };
+  const handleDelete=(id)=>{
+       
+    dispatch(REMOVE_Cosmetics_item(id))
 
-  useEffect(() => {
-    dispatch(Get_Cosmetics_item());
-  }, [reset]);
+}
 
-  let data = Cosmetics.filter((item) => item.category === filter);
+const handleUpdate=(id)=>{
+  console.log(Creds,id)
+  dispatch(UPDATE_Cosmetics_item(id,Creds))
 
-  if (Cosmetics.length === 0) return <Loading />;
 
-  return (
-    <div style={{ marginTop: "120px" }}>
-      <Flex>
-        <Box id='maindiv' border={"1px solid"} width={"20%"}>
-          <Text marginTop={2} color={"teal"} fontSize={35} fontWeight={"bold"}>Cosmetics</Text>
-          <Box marginLeft={"40px"} textAlign={"left"} marginTop={"15px"}>
-            <Flex alignItems={"center"} gap={"15px"}> 
-              <Image marginTop={"8px"} borderRadius={"50%"} height={"25px"} width={"25px"} src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaXelByMSTcBlhsGChcrAWlXVXNXxI53LxzirHbHwGJQ&s' />
-              <Text className='menu' onClick={() => setFilter("Mens")} fontWeight={"bold"}>Mens</Text>
-            </Flex>
-            <Flex alignItems={"center"} gap={"15px"}> 
-              <Image marginTop={"8px"} borderRadius={"50%"} height={"25px"} width={"25px"} src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROZH_L731sgBrBunH8f5lp6pLAhvehf2DuZJGjFeI&s' />
-              <Text className='menu' onClick={() => setFilter("Womens")} fontWeight={"bold"}>Womens</Text>
-            </Flex>
-            <Flex alignItems={"center"} gap={"15px"}> 
-              <Image marginTop={"8px"} borderRadius={"50%"} height={"25px"} width={"25px"} src='https://img.icons8.com/color/2x/children.png' />
-              <Text className='menu' onClick={() => setFilter("KIDS")} fontWeight={"bold"}>Kids</Text>
-            </Flex>
-          </Box>
-          <Box id="filter">
-            <select onChange={(e) => handleChange(e)}>
-              <option value="reset">sort-by-price</option>
-              <option value="high">Low to high</option>
-              <option value="low">High to low</option>
-            </select>
-          </Box>
-        </Box>
+}
+  
+   
+    
+    return (
+        <>
+        
+        <Button onClick={onOpen}>Add Product</Button>
+       
 
-        <Grid mt={"30px"} marginLeft={"240px"} paddingLeft={"15px"} width={"80%"} templateColumns='repeat(2, 1fr)' gap={6}>
-          {data.map((el) => (
-            <Box key={el.id} textAlign={"left"}>
-              <img src={el.image1} alt="" />
-              <Text noOfLines={[1]} fontSize={17}>{el.title}</Text>
-              <Flex gap={2}>
-                <Image width={17} src="https://img.shop.com/Image/resources/images/onecart-icon.svg" />
-                <Text fontSize={13}>Sold by {el.soldby}</Text>
-              </Flex>
-              <Text>{el.category}</Text>
-              <Text fontWeight={"bold"}>$ {el.price}</Text>
-              <Box mb="15px">
-                {Array(5).fill("").map((_, i) => (
-                  <Icon
-                    as={AiFillStar}
-                    key={i}
-                    color={i <= Math.ceil(Math.random() * 3) ? "gold" : "gray.300"}
-                  />
-                ))}
-              </Box>
-              <Text color={"teal"} fontSize={14}>Free shipping with $50.00 orders</Text>
-              <Button backgroundColor={"blue.300"} onClick={() => handleClick(el)} borderRadius={25} width={85} marginLeft={"70%"}>View</Button>
-            </Box>
-          ))}
-        </Grid>
+          <>    
+             <Stack>         { Cosmetics.map((user)=>{
+                              return (  <>
+                                <Flex key={Math.random()}   >
+        <Text w={"30%"}  p="0"> {user.title}</Text>
+          <Input w={"30%"} name='price' onChange={hanldeChange} placeholder={user.price}></Input> 
+        
+        <Flex p="0" >
+        <Button   colorScheme='teal' onClick={()=>handleUpdate(user.id)} border="1px solid black " mr="2"><EditIcon /></Button> 
+        <Button onClick={()=>handleDelete(user.id)}  border="1px solid black ">  <DeleteIcon /></Button>  
+        
+        </Flex>
       </Flex>
-    </div>
-  );
+                              
+                              </> )})}   </Stack>
+
+                               <Modal
+                               isOpen={isOpen}
+                               onClose={onClose}
+                             >
+                              <ModalOverlay />
+                               <ModalContent>
+                                 
+                                  <ModalCloseButton />
+                                  <ModalBody pb={6}>
+                        
+                                    <form  onSubmit={handleSubmit}>
+                                         <Stack>
+                                         <input type="text" name='title' style={{border:"1px solid black"}} placeholder="title..........."  onChange={hanldeChange} />
+                                         </Stack>
+                                         <Stack>
+                                         <select name='code' onChange={hanldeChange} style={{border:"1px solid black"}}>
+                                               <option>select code </option>
+                                               <option value="MNK59Y"> MNK59Y</option>
+                                        </select>
+                                         
+                                        </Stack>
+                                        <Stack>
+                                        <input type="text" name='image1'  style={{border:"1px solid black"}}    onChange={hanldeChange} placeholder="image1 " />
+                                        <input type="text" name='image2'  style={{border:"1px solid black"}}    onChange={hanldeChange} placeholder="image2 " />
+                                        <input type="text" name='image3'  style={{border:"1px solid black"}}    onChange={hanldeChange}  placeholder="image3 "/>
+                                        <input type="text" name='image4'  style={{border:"1px solid black"}}    onChange={hanldeChange} placeholder= "image4" />
+                                        </Stack>
+                                        <Stack>
+                                        <input type="text" name='price'  style={{border:"1px solid black"}}  onChange={hanldeChange} placeholder="Price  :eg..$90.00" />
+                                        </Stack>
+                                        <Stack>
+                                        
+               
+                                       <select name='soldby' onChange={hanldeChange} style={{border:"1px solid black"}}>
+                                             <option>select soldby </option>
+                                             <option value="Cutter & Buck"> Cutter & Buck</option>
+                                       </select>
+                                       </Stack>
+                       
+                                      
+                
+                                        <Button  type='submit' colorScheme='blue' mr={3}>
+                                           Save
+                                        </Button><Button onClick={onClose}>Cancel</Button>
+                                         </form>
+                                  
+                                      
+                                                                       
+                                            
+                                        </ModalBody>
+                                      </ModalContent>
+                                    </Modal>
+                                      </>               
+                                                     
+    </>);
 };
 
-export default Cosmetics;
+export default Clothes;
