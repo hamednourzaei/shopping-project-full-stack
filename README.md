@@ -31,14 +31,14 @@ This Project  was a collaborative project buit by team of 5 members in 5 days
 - This is the landing page of our website. Clicking an option on the Navbar will redirect to the respective page.
 <img width="50%" src="./src/utility/sign up.png">
 - 
-<img width="50%" src="./shopping-project-full-stack/src/utility/Navbar.png">
+<img width="50%" src="./src/utility/Navbar.png">
 
 ## Home Page:
 
 - The images on the home page are linked to all Pages. Hence clicking on it will ensure successful redirection to the next Page.
 
 - 
-<img width="50%" src="./shopping-project-full-stack/src/utility/home.png">
+<img width="50%" src="./src/utility/home.png">
 
  
 
@@ -49,7 +49,7 @@ This Project  was a collaborative project buit by team of 5 members in 5 days
 - 
 <br />
 
-<img width="50%" src="./shopping-project-full-stack/src/utility/sign up.png">
+<img width="50%" src="./src/utility/sign up.png">
 
 
 ## Login page:
@@ -58,21 +58,21 @@ This Project  was a collaborative project buit by team of 5 members in 5 days
 - User can Login with regestered email ID
 - 
 <br />
-<img width="50%" src="./shopping-project-full-stack/src/utility/signin.png">
+<img width="50%" src="./src/utility/signin.png">
 
 
 ## Product Page:
 
 
 
-<img width="50%" src="./shopping-project-full-stack/src/utility/product.png">
+<img width="50%" src="./src/utility/product.png">
 
 
 ## Pdoduct Detailes Page:
 
  
 
-<img width="50%" src="./shopping-project-full-stack/src/utility/product.png">
+<img width="50%" src="./src/utility/product.png">
 
 
 
@@ -82,7 +82,7 @@ This Project  was a collaborative project buit by team of 5 members in 5 days
 - **Password**: hamednourzaei
 
 
-<img width="50%" src="./shopping-project-full-stack/src/utility/admindash.png">
+<img width="50%" src="./src/utility/admindash.png">
  
 
 # About Me
