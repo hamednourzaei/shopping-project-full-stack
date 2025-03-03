@@ -25,12 +25,14 @@
     "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+"scripts": {
+  "start": "react-scripts start",  // این دستور برای npm start است
+  "dev": "react-scripts start",    // حالا می‌توانید از npm run dev استفاده کنید
+  "build": "react-scripts build",
+  "test": "react-scripts test",
+  "eject": "react-scripts eject"
+}
+
   "eslintConfig": {
     "extends": [
       "react-app",
