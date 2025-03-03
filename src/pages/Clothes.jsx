@@ -1,234 +1,185 @@
-import React from "react";
-import Sidebar from "./Sidebar";
-import { Flex, Grid, Box, Text, Button, Icon, Image } from "@chakra-ui/react";
-import axios from "axios";
-import { AiFillStar } from 'react-icons/ai'
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { setItem } from "../utility/localStorage";
-import "../index.css";
-import { useDispatch, useSelector } from "react-redux";
-import { Get_cloth_item, sortCLOTHES } from "../store/Cloth/Cloth.action";
-import Loading from "./Loading";
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { Button, Flex, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure } from '@chakra-ui/react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { ADD_Cloth_item, Get_cloth_item, REMOVE_Cloth_item, UPDATE_Cloth_item } from '../../store/Cloth/Cloth.action';
 
 const Clothes = () => {
-  const [filter, setFilter] = useState("Mens");
-  const [reset,setReset ]=useState(false)
-
-  const navigate = useNavigate();
-  
-
-
-
-
-
-  const handleClick = (item) => {
-    setItem("singleproduct", item);
-    navigate("/clothes/singleproduct");
-  };
-  const handleChange = (e) => {
-    const { value } = e.target;
-    console.log(value)
-    if(value=="reset"){
-
-      setReset((previous)=>!previous)
-      return 
-    }
-    dispatch(sortCLOTHES(value))
-
-  }
-  
-
+  const { isOpen, onOpen, onClose } = useDisclosure(); 
   const { cloth } = useSelector((store) => store.ClothManger);
   const dispatch = useDispatch();
+
+  const [filter, setFilter] = useState("Mens");
+  const [Creds, setCreds] = useState({});
+
   useEffect(() => {
     dispatch(Get_cloth_item());
-  }, [reset]);
-let data;
-   data = cloth.filter((item) => item.category === filter);
-   
+  }, [dispatch]);
 
+  useEffect(() => {
+    const filteredMen = cloth.filter((item) => item.category === filter);
+    console.log(filteredMen); 
+  }, [filter, cloth]);
 
+  const handleFilterChange = (data) => {
+    setFilter(data);
+  };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCreds({
+      ...Creds,
+      [name]: value,
+    });
+  };
 
-
-  {
-    if (data.length==0) {
-      return <Loading/>;
-    } else {
-      return (
-        <div style={{ marginTop: "120px" }}>
-          <Flex>
-            {/* <Sidebar setFilter={setFilter}/> */}
-            <Box id="maindiv" border={"1px solid"} width={"20%"}>
-              <Text
-                marginTop={2}
-                color={"teal"}
-                id="clothe"
-                fontSize={35}
-                fontWeight={"bold"}
-              >
-                CLOTHES
-              </Text>
-              <Box marginLeft={"40px"} textAlign={"left"} marginTop={"15px"}>
-                <Flex alignItems={"center"} gap={"15px"}>
-                  <Image
-                    marginTop={"8px"}
-                    borderRadius={"50%"}
-                    height={"25px"}
-                    width={"25px"}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaXelByMSTcBlhsGChcrAWlXVXNXxI53LxzirHbHwGJQ&s"
-                  ></Image>
-                  <Text
-                    className="menu"
-                    onClick={() => setFilter("Mens")}
-                    fontWeight={"bold"}
-                  >
-                    Mens
-                  </Text>
-                </Flex>
-
-                <Flex alignItems={"center"} gap={"15px"}>
-                  <Image
-                    marginTop={"8px"}
-                    borderRadius={"50%"}
-                    height={"25px"}
-                    width={"25px"}
-                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROZH_L731sgBrBunH8f5lp6pLAhvehf2DuZJGjFeI&s"
-                  ></Image>
-                  <Text
-                    className="menu"
-                    onClick={() => setFilter("Womens")}
-                    fontWeight={"bold"}
-                  >
-                    Womens
-                  </Text>
-                </Flex>
-
-                <Flex alignItems={"center"} gap={"15px"}>
-                  <Image
-                    marginTop={"8px"}
-                    borderRadius={"50%"}
-                    height={"25px"}
-                    width={"25px"}
-                    src="https://img.icons8.com/color/2x/children.png"
-                  ></Image>
-                  <Text
-                    className="menu"
-                    onClick={() => setFilter("KIDS")}
-                    fontWeight={"bold"}
-                  >
-                    Kids
-                  </Text>
-                </Flex>
-              </Box>
-
-              <Box id="filter">
-            <select  name="" id="" onChange={(e) => handleChange(e)}>
-             <option value="reset" >sort-by-price</option>
-              <option value="high">Low to high </option>
-              <option value="low">High to low</option>
-            </select>
-          </Box>
-
-              <Box
-                id="add"
-                marginLeft={"0px"}
-                textAlign={"left"}
-                marginTop={"50px"}
-              >
-                <img
-                  src="https://img.shop.com/Image/topbrands/nmlogos_76181.gif"
-                  alt=""
-                />
-                <Text>
-               
-                  Up to 6.00% Cashback <br />
-                  Store conditions
-                </Text>
-                <Button>partner Site 🤝</Button>
-              </Box>
-
-              <Box
-                id="add"
-                marginLeft={"0px"}
-                textAlign={"left"}
-                marginTop={"20px"}
-              >
-                <img
-                  src="https://img.shop.com/Image/topbrands/nmlogos_98199.gif"
-                  alt=""
-                />
-                <Text>
-                  
-                  Up to 6.00% Cashback <br />
-                  Store conditions
-                </Text>
-                <Button>partner Site 🤝</Button>
-              </Box>
-            </Box>
-
-            <Grid
-              mt={"30px"}
-              marginLeft={"240px"}
-              paddingLeft={"15px"}
-              width={"80%"}
-              templateColumns="repeat(3, 1fr)"
-              gap={6}
-            >
-              {data.map((el) => {
-                return (
-                  <Box id="probox" key={Math.random()}>
-                    <Box textAlign={"left"}>
-                      <img id="hov" src={el.image1} alt="" />
-                      <Text noOfLines={[1]} fontSize={17}>{el.title}</Text>
-                      <Flex gap={2}>
-                        <img
-                          width={17}
-                          src="https://img.shop.com/Image/resources/images/onecart-icon.svg"
-                          alt=""
-                        />
-                        <Text fontSize={13}>Sold by {el.soldby}</Text>
-                      </Flex>
-                      <p>{el.category}</p>
-                      <Text fontWeight={"bold"}>$ {el.price}</Text>
-                      <Box mb="15px">
-                  {Array(5)
-                    .fill("")
-                    .map((_, i) => {
-                      let rating = Math.ceil(Math.random() * 3);
-
-                      return <Icon
-                        as={AiFillStar}
-                        key={i}
-                        color={i <= rating ? "gold" : "gray.300"}
-                      />
-                    })}
-                </Box>
-                      <Text color={"teal"} fontSize={14}>
-                        Free shipping with $50.00 orders
-                      </Text>
-
-                      <Button
-                        backgroundColor={"blue.300"}
-                        onClick={() => handleClick(el)}
-                        marginTop={"-65px"}
-                        borderRadius={25}
-                        width={85}
-                        marginLeft={"70%"}
-                      >
-                        View
-                      </Button>
-                    </Box>
-                  </Box>
-                );
-              })}
-            </Grid>
-          </Flex>
-        </div>
-      );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      console.log(Creds);
+      dispatch(ADD_Cloth_item(Creds));
+    } catch (error) {
+      console.error("Failed to add item", error);
     }
-  }
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      dispatch(REMOVE_Cloth_item(id));
+    } catch (error) {
+      console.error("Failed to delete item", error);
+    }
+  };
+
+  const handleUpdate = async (id) => {
+    try {
+      console.log(Creds, id);
+      dispatch(UPDATE_Cloth_item(id, Creds));
+    } catch (error) {
+      console.error("Failed to update item", error);
+    }
+  };
+
+  return (
+    <>
+      <select onChange={(e) => handleFilterChange(e.target.value)} style={{ border: "1px solid black" }}>
+        <option value="Mens">Men</option>
+        <option value="Womens">Women</option>
+        <option value="KIDS">Kids</option>
+      </select>
+      <Button onClick={onOpen}>Add Product</Button>
+
+      <Stack>
+        {cloth
+          .filter((item) => item.category === filter)
+          .map((user) => (
+            <Flex key={user.id}>
+              <Text w={"30%"} p="0">
+                {user.title}
+              </Text>
+              <Input
+                w={"30%"}
+                name="price"
+                onChange={handleChange}
+                placeholder={user.price}
+              />
+              <Flex p="0">
+                <Button colorScheme="teal" onClick={() => handleUpdate(user.id)} border="1px solid black" mr="2">
+                  <EditIcon />
+                </Button>
+                <Button onClick={() => handleDelete(user.id)} border="1px solid black">
+                  <DeleteIcon />
+                </Button>
+              </Flex>
+            </Flex>
+          ))}
+      </Stack>
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalCloseButton />
+          <ModalBody pb={6}>
+            <form onSubmit={handleSubmit}>
+              <Stack>
+                <input
+                  type="text"
+                  name="category"
+                  style={{ border: "1px solid black" }}
+                  placeholder="Category (Men, Women, etc.)"
+                  onChange={handleChange}
+                />
+              </Stack>
+              <Stack>
+                <input
+                  type="text"
+                  name="title"
+                  style={{ border: "1px solid black" }}
+                  placeholder="Title"
+                  onChange={handleChange}
+                />
+              </Stack>
+              <Stack>
+                <select name="code" onChange={handleChange} style={{ border: "1px solid black" }}>
+                  <option>select code</option>
+                  <option value="MNK59Y">MNK59Y</option>
+                </select>
+              </Stack>
+              <Stack>
+                <input
+                  type="text"
+                  name="image1"
+                  style={{ border: "1px solid black" }}
+                  onChange={handleChange}
+                  placeholder="Image 1"
+                />
+                <input
+                  type="text"
+                  name="image2"
+                  style={{ border: "1px solid black" }}
+                  onChange={handleChange}
+                  placeholder="Image 2"
+                />
+                <input
+                  type="text"
+                  name="image3"
+                  style={{ border: "1px solid black" }}
+                  onChange={handleChange}
+                  placeholder="Image 3"
+                />
+                <input
+                  type="text"
+                  name="image4"
+                  style={{ border: "1px solid black" }}
+                  onChange={handleChange}
+                  placeholder="Image 4"
+                />
+              </Stack>
+              <Stack>
+                <input
+                  type="text"
+                  name="price"
+                  style={{ border: "1px solid black" }}
+                  onChange={handleChange}
+                  placeholder="Price: e.g., $90.00"
+                />
+              </Stack>
+              <Stack>
+                <select name="soldby" onChange={handleChange} style={{ border: "1px solid black" }}>
+                  <option>select sold by</option>
+                  <option value="Cutter & Buck">Cutter & Buck</option>
+                </select>
+              </Stack>
+              <Button type="submit" colorScheme="blue" mr={3}>
+                Save
+              </Button>
+              <Button onClick={onClose}>Cancel</Button>
+            </form>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    </>
+  );
 };
 
 export default Clothes;
