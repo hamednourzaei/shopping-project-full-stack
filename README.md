@@ -11,8 +11,6 @@ This Project was a collaborative project built by a team of 5 members in 5 days.
 <br />
 # Features: Home Page, Admin page, Login/Sign up Page, Navbar, Product Pages, Cart Page, Footer
 
-
-
 <h3 align="center"><a href="https://3shpoing.netlify.app/"><strong>Want to see live preview »</strong></a></h3>
 
  
